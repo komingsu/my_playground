@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "servers": {
+    "filesystem": { "command": "mcp-filesystem", "args": [] },
+    "git": { "command": "mcp-git", "args": [] },
+    "shell": { "command": "mcp-shell", "args": [] },
+    "http": { "command": "mcp-http", "args": [] }
+  },
+  "policies": {
+    "allowWrite": [
+      "apps/",
+      "docker/",
+      "infra/",
+      ".github/",
+      "docs/",
+      "compose.cpu.yaml",
+      "compose.gpu.yaml"
+    ],
+    "denyWrite": ["models/", "data/", "secrets/"]
+  }
+}
