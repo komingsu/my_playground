@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  rl-train:
+    image: ${ECR_REGISTRY}/rl-train:latest
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: ["gpu"]
+    env_file: [.env]
+    environment:
+      RAY_HEAD_ADDR: ${C7G_PRIVATE_IP}:6379
+      AWS_REGION: ${AWS_REGION}
+      S3_MODELS_BUCKET: ${S3_MODELS_BUCKET}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: ${LOG_GROUP}
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream: rl-train
+    restart: "no"
+    init: true
