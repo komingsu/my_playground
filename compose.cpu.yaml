@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  collector:
+    image: ${ECR_REGISTRY}/rl-sim:latest
+    command: python -m apps.collector.run --symbols KR7005930003 --start 2024-01-01
+    env_file: [.env]
+    environment:
+      AWS_REGION: ${AWS_REGION}
+      S3_BUCKET: ${S3_RAW_BUCKET}
+      KIS_SECRET_ARN: ${KIS_SECRET_ARN}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: ${LOG_GROUP}
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream: collector
+    restart: unless-stopped
+    init: true
+
+  features:
+    image: ${ECR_REGISTRY}/rl-sim:latest
+    command: python -m apps.features.build --asof 2025-09-01
+    env_file: [.env]
+    environment:
+      S3_INPUT: s3://${S3_RAW_BUCKET}/minutes
+      S3_OUTPUT: s3://${S3_PROC_BUCKET}/
+      AWS_REGION: ${AWS_REGION}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: ${LOG_GROUP}
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream: features
+    restart: "no"
+    init: true
+
+  api:
+    image: ${ECR_REGISTRY}/rl-api:latest
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8080
+    env_file: [.env]
+    environment:
+      MODELS_BUCKET: ${S3_MODELS_BUCKET}
+      RUN_ID: ${RUN_ID}
+      AWS_REGION: ${AWS_REGION}
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: ${LOG_GROUP}
+        awslogs-region: ${AWS_REGION}
+        awslogs-stream: api
+    restart: unless-stopped
+    init: true
