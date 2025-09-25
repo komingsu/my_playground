@@ -35,41 +35,21 @@
 ## 디렉토리 구조 (수정 필요)
 
 ```
-
 .
-├─ apps/
-│  ├─ collector/      # 데이터 수집기 (KIS REST/WS)
-│  │  ├─ kis/         # 인증/REST/WS 커넥터
-│  │  ├─ jobs/        # ohlcv\_daily, intraday\_1m 등 잡
-│  │  └─ pipelines/   # 배치/증분 수집 파이프라인
-│  ├─ features/       # 피처 엔지니어링 (팩터/변환/Feature Store)
-│  ├─ universe/       # 유니버스(종목 선정 규칙)
-│  ├─ ml/             # ML 학습/스코어링/평가 (LightGBM/XGBoost/CatBoost)
-│  ├─ portfolio/      # 포트폴리오 최적화/리밸런싱/체결 시뮬
-│  ├─ backtest/       # 백테스트 엔진/성과리포트
-│  ├─ rl/             # (확장) Gym Env, PPO/DQN 학습/평가
-│  └─ api/            # FastAPI 서비스 (signal/order/health/promote)
-│     ├─ routers/
-│     ├─ services/
-│     └─ schemas/
-├─ packages/          # 공통 모듈
-│  ├─ core/           # 시간/캘린더/로그/에러/설정
-│  ├─ data/           # 데이터 IO (Parquet/duckdb)
-│  └─ trading/        # 주문 래퍼(KIS)/리스크 가드/체결 추적
-├─ configs/           # 설정 (환경/env, 파이프라인/jobs, 전략/strategies)
-├─ data/              # 로컬 개발 캐시 (raw/proc/features/outputs)
-├─ docker/
-│  ├─ cpu/            # ARM64용 Dockerfile
-│  └─ gpu/            # CUDA용 Dockerfile
-├─ infra/             # IaC-lite 스크립트 (역할/정책/예산)
-├─ notebooks/         # 실험/EDA/프로토타입
-├─ scripts/           # 실행 엔트리포인트 (run\_collect\_\*, run\_train\_ml 등)
-├─ tests/             # 단위/통합 테스트
-├─ .github/workflows/
-│  └─ build.yml       # 멀티아키 Buildx → ECR 푸시
-├─ CheckList.md       # 실행 체크리스트 (순서/이유/완료조건)
-├─ KIS\_API.md         # KIS API 사용 노트
-├─ pyproject.toml     # 의존성/패키징 (또는 requirements.txt)
+├─ libs/
+│  ├─ kis_client.py              # KIS 인증/호출 공통 (일봉/분봉 공용)
+│  ├─ utils_io.py                # parquet 증분 저장/리샘플 유틸
+│  └─ symbols.py (선택)          # load_symbols(), (선택) 전체심볼 갱신 → 파일로 덤프
+├─ scripts/
+│  ├─ run_download_intraday.py   # 1분봉 수집(현재 액션의 유일 엔트리)
+│  └─ run_download_daily.py (선택)# daily_candle.py를 리네임한 일봉 수집 엔트리
+├─ data/
+│  ├─ raw/
+│  │  ├─ kis_intraday/<SYM>/1m/data.parquet  # 1분 원천(증분)
+│  │  └─ kis_daily/<SYM>/1d/data.parquet     # (선택) 일봉 원천(증분)
+│  ├─ proc/                     # 리샘플/보조지표 결과(다음 액션에서 생성)
+│  └─ meta/top50_symbols.txt    # 유니버스 단일 진실 원천(파일 기반)
+├─ archive/                      # 지금 당장 안 쓰는 파일 보관
+│  └─ daily_candle.py, symbols.py (필요 시 여기로 이동)
 └─ README.md
-
 ```

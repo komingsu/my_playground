@@ -10,8 +10,8 @@ from pathlib import Path
 
 import pandas as pd
 
-from packages.core.kis_auth import get_or_load_access_token
-from apps.collector.kis.daily_candle import get_daily_candle
+from libs.kis_auth import get_or_load_access_token
+from libs.daily_candle import get_daily_candle
 
 
 def main():
