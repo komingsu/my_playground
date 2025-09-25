@@ -8,9 +8,3 @@ __pycache__/
 dist/
 build/
 .artifacts/
-*.csv
-<<<<<<< HEAD
-*.parquet
-=======
-*.parquet
->>>>>>> 6e3d399fc571b1bb48bdc1c7dea269196d0626db
