@@ -35,21 +35,20 @@
 ## 디렉토리 구조 (수정 필요)
 
 ```
-.
+my_playground/
+├─ README.md                      # 현재 상태/다음 액션(1개)만 기재
 ├─ libs/
-│  ├─ kis_client.py              # KIS 인증/호출 공통 (일봉/분봉 공용)
-│  ├─ utils_io.py                # parquet 증분 저장/리샘플 유틸
-│  └─ symbols.py (선택)          # load_symbols(), (선택) 전체심볼 갱신 → 파일로 덤프
+│  ├─ kis_auth.py                # KIS 토큰 발급/갱신 유틸(공용 인증)  :contentReference[oaicite:1]{index=1}
+│  └─ daily_candle.py            # 일봉(1d) 수집/저장 로직(기존)       :contentReference[oaicite:2]{index=2}
 ├─ scripts/
-│  ├─ run_download_intraday.py   # 1분봉 수집(현재 액션의 유일 엔트리)
-│  └─ run_download_daily.py (선택)# daily_candle.py를 리네임한 일봉 수집 엔트리
+│  ├─ run_collect_daily.py       # 일봉 수집 엔트리(기존)              :contentReference[oaicite:3]{index=3}
+│  └─ run_score_quant.py         # 스코어 산출/TopN 선정(기존)         :contentReference[oaicite:4]{index=4}
 ├─ data/
-│  ├─ raw/
-│  │  ├─ kis_intraday/<SYM>/1m/data.parquet  # 1분 원천(증분)
-│  │  └─ kis_daily/<SYM>/1d/data.parquet     # (선택) 일봉 원천(증분)
-│  ├─ proc/                     # 리샘플/보조지표 결과(다음 액션에서 생성)
-│  └─ meta/top50_symbols.txt    # 유니버스 단일 진실 원천(파일 기반)
-├─ archive/                      # 지금 당장 안 쓰는 파일 보관
-│  └─ daily_candle.py, symbols.py (필요 시 여기로 이동)
-└─ README.md
+│  ├─ raw/                       # 원천(무가공) 저장소
+│  │  └─ kis_daily/<SYM>/1d/    # 일봉 parquet(증분) - daily_candle 결과
+│  ├─ proc/
+│  │  └─ selection/
+│  │     └─ 20250923_top50.csv  # 현재 선정된 Top 50 (유니버스 소스)   :contentReference[oaicite:5]{index=5}
+│  └─ meta/
+│     └─ top50_symbols.txt      # (다음 단계에서) 분봉 수집용 심볼 리스트로 변환
 ```

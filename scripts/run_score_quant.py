@@ -30,7 +30,8 @@ WEIGHTING_METHOD = "inv_vol_liq"  # "equal" | "inv_vol" | "inv_vol_liq"
 MAX_WEIGHT_CAP = 0.05
 EXCLUDE_KONEX = True  # KONEX 제외
 USE_INDEX_IF_AVAILABLE = True     # KOSPI200/KOSDAQ150 있으면 우선 사용
-TODAY = datetime.now().strftime("%Y%m%d")
+# TODAY = datetime.now().strftime("%Y%m%d")
+TODAY = 20250923
 
 # 사용할 팩터 컬럼
 FACTOR_COLS = {
@@ -362,7 +363,6 @@ def main():
 
     print("\n팩터 익스포저 요약(z-score 기준):")
     print(_exposure_summary(df_out))
-
 
 if __name__ == "__main__":
     main()
